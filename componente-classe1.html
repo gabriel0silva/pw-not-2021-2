@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office"
+    xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        //COmponente em forma de Class
+        class FormSomaClass extends React.Component {
+            //Constructor da classe
+            constructor(props) {
+                super(props)
+                // Objeto que vai ser executado primeiro no ciclo de vida do componente
+                this.state = {
+                    number1: 0, 
+                    number2: 0, 
+                    result: 0
+                }
+            }
+
+            //Essa função recebe o event disparado pelo input e coloca na variável
+            setNumber1 = event => {
+                if(!isNaN(event.target.value)) { //Verifica se o valor é um número
+                    this.setState({  //Se sim, chama a function setState
+                        number1: Number(event.target.value) // Number é colocado para garantir se o valor é um número mesmo
+                    },/* 
+                        Depois da função setState é usado o callback e em seguida a função setSoma() para somar o number1 e number2.
+
+                        O callback foi usado pelo problema do useState, pois sempre que chamado estava contecendo um problema na soma,
+                        pegando o valor anterior e realzando a soma errada.
+
+                      */
+                    () => this.setSum())
+                }
+            }
+
+            // Essa função recebe o event disparado pelo input e coloca na variável
+            setNumber2 = event => {
+                if (!isNaN(event.target.value)) {
+                    this.setState({number2: Number(event.target.value)}, 
+                    () => this.setSum())
+                }
+            }
+            // Como os valores são apenas lidos e mostrados, não é preciso usar o callback novamente. Básicamente essa função somo
+            // os valores contidos nas váriaveis number1 e number2.
+            setSum = () => {
+                //Variavel responsável por receber o valor da variavel num1 e num2
+                // estou usando o "this.state" para acessar o valor dentro do objeto "state"
+                let sum = this.state.number1 + this.state.number2 // Variável  que recebe a soma dos valores, como se trata de uma classe
+                                                                  //de objetos, temos que usar o state para aceesar o objeto
+                this.setState({resultado: sum})
+            }
+            // Renderiza os elementos HTML
+            render() {
+                return (
+                    <form>
+                        <div>
+                            <label htmlFor="num1">Primeiro número:</label><br />
+                            <input id="num1" type="number" onChange={this.setNum1} />
+                        </div>
+                        <div>
+                            <label htmlFor="num2">Segundo número:</label><br />
+                            <input id="num2" type="number" onChange={this.setNum2} />
+                        </div>
+                        
+                        <div>Soma: {this.state.result}</div>
+                    </form>
+                )
+            }
+        }
+
+        //Renderiza o componente class
+        ReactDOM.render(<FormSomaClass />, document.getElementById('root'))
+
+    </script>
+
+</body>
+
+</html>
